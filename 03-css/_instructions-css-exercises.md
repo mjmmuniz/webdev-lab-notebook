@@ -17,8 +17,6 @@ These are the accent colors used for the navbar and the main heading:
 }
 ```
 
-# hi
-
 Use 'Cinzel' as the custom font for the navbar and the headings.
 
 ```html
