@@ -34,7 +34,7 @@ const createNewElement = function (data) {
 
   h2.textContent = data.name;
   img.src = pokemonImage;
-  img.alt = `image of ${data.name}`;
+  img.alt = pokemonName;
   img.width = "240";
   img.height = "240";
 
@@ -74,6 +74,48 @@ const fetchData = async function () {
     const errorElement = document.createElement("p");
     errorElement.textContent = "Error fetching data from the PokeApi";
     errorElement.setAttribute("class", "errorMessage");
+    pokeList.append(errorElement);
+  } finally {
+    console.log("executes either way");
+    const loading = document.querySelector(".loading-container");
+    loading.setAttribute("class", "display-none");
+  }
+};
+//fetchData();
+
+const fetchDataAll = async function () {
+  const url = "https://pokeapi.co/api/v2/pokemon?limit=25&offset=0";
+
+  const pokeList = document.querySelector(".poke-list");
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const pokemonList = data.results;
+
+    console.log(data.results);
+
+    const promises = pokemonList.map((pokemon) =>
+      fetch(pokemon.url)
+        .then((res) => res.json())
+        .catch((error) => console.error("an error occured")),
+    );
+
+    const pokemonData = await Promise.all(promises);
+
+    console.log(pokemonData);
+
+    pokemonData.forEach((pokemon) => {
+      const elem = createNewElement(pokemon);
+      pokeList.append(elem);
+    });
+  } catch (error) {
+    console.error("Error fetching data from the PokeAPI", error);
+    const errorElement = document.createElement("p");
+    errorElement.textContent = "Error fetching data from the PokeApi";
+    errorElement.setAttribute("class", "errorMessage");
+    pokeList.append(errorElement);
   } finally {
     console.log("executes either way");
     const loading = document.querySelector(".loading-container");
@@ -81,4 +123,4 @@ const fetchData = async function () {
   }
 };
 
-fetchData();
+fetchDataAll();
