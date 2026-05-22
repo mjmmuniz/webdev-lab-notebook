@@ -5,7 +5,6 @@ const calculateAge = function (dateString) {
   const today = new Date();
 
   if (isNaN(birthDate.getTime())) {
-    console.log(birthDate.getTime());
     return "Error: Invalid date format";
   }
 
